@@ -4,6 +4,7 @@ This is a rough version, obviously not something I would launch in a prod enviro
 
 This demonstrates basic crud and some extra features like archiving as it was not stated as a requirement but implied by the data explanation
 
+I would like to add more validation, spruce up the validation messages and add user confirmation prompts on successful create and archived actions
 ## Setup Soliloquy
 
 This application was built for review by Den Creative and or Elixirr

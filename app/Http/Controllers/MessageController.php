@@ -14,7 +14,9 @@ class MessageController extends Controller
      */
     public function index()
     {
+        //Get all messages that are not archived
         $messages = Message::where('archived',NULL)->get();
+        //Add preview and state items to the base message
         foreach ($messages as &$message){
             $message['preview'] = substr($message['body'],0,20);
             if ($message['read'] === NULL){
@@ -33,6 +35,7 @@ class MessageController extends Controller
      */
     public function create()
     {
+        //send the user directly to the create view
         return view('messages.create');
     }
 
@@ -44,20 +47,22 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-
+        //Basic validation on subject and body
         $request->validate([
             'subject'=>'required',
             'body'=>'required',
         ]);
-
+        //get the current date to save as the "send time"
         $current_date = date('Y-m-d H:i:s');
 
+        //prepare the item for saving
         $message = new Message([
             'subject' => $request->get('subject'),
             'body' => $request->get('body'),
             'sent' => $current_date,
         ]);
 
+        //Commit to DB
         $message->save();
         return redirect('/messages')->with('success', 'Message sent!');
     }
@@ -70,56 +75,31 @@ class MessageController extends Controller
      */
     public function show($id)
     {
+        //Find the message by ID
         $message = Message::find($id);
+        //Update the read date with the current datetime stamp
         if ($message['read']== NULL){
             $current_date = date('Y-m-d H:i:s');
             $message['read'] = $current_date;
             $message->save();
         }
+        //return the user to the view with an object containing the requested message
         return view('messages.show',compact('message'));
     }
     public function archive($id)
     {
+        //Find the message to archive by id
         $message = Message::find($id);
+
+        //Set the archived date to the current datetime stamp
         if ($message['archived'] == NULL){
             $current_date = date('Y-m-d H:i:s');
             $message['archived'] = $current_date;
             $message->save();
         }
-        return redirect('/messages');
+
+        //redirect the user back to the index page
+        return redirect('/');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
