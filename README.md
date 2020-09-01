@@ -1,4 +1,4 @@
-##Dev notes
+## Dev notes
 
 This is a rough version, obviously not something I would launch in a prod environment, however I spent the required amount of time of 3 hours, got snagged for 30 mins on tailwind as i have never used it before, great framework by the way.
 
